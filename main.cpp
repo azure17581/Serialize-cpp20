@@ -3,6 +3,7 @@
 #include <string>
 #include <list>
 #include <map>
+#include <utility>
 
 #include "bitSave.h"
 #include "bitLoad.h"
@@ -120,10 +121,6 @@ void t5(){
 
 
 int main() {
-	cout << hex << hexfloat;
-	double k = 0.01;
-	cout << k << endl;
-
 	t5();
 	return 0;
 

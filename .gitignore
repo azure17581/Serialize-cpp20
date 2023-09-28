@@ -1,2 +1,9 @@
 a.out
+test.out
 out
+mem.cpp
+mem.h
+test.h
+test_out/
+test_eq.out
+gtest.cpp

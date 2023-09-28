@@ -10,8 +10,8 @@ namespace bitRW{
 	using namespace std;
 
 	template <BASIC T>
-	bool bitLoad(T& x, ifstream& ifs){
-		cout << "basicL\n";
+	bool bitLoad(T& x, ifstream& ifs, bool dbg = false){
+		if(dbg) cout << "basicL\n";
 
 		ifs.read(bit_cast<char*>(&x), sizeof(x));
 
@@ -20,10 +20,20 @@ namespace bitRW{
 
 		return !fail;
 	}
+	
+	template <Pair T>
+	bool bitLoad(T& x, ifstream& ifs, bool dbg = false){
+		if(dbg) cout << "PairL\n";
+
+		if(!bitLoad(x.first, ifs, dbg)) return false;
+		if(!bitLoad(x.second, ifs, dbg)) return false;
+
+		return true;
+	}
 
 	template <S_Container T>
-	bool bitLoad(T& x, ifstream& ifs){
-		cout << "S_ContainerL\n";
+	bool bitLoad(T& x, ifstream& ifs, bool dbg = false){
+		if(dbg) cout << "S_ContainerL\n";
 
 		size_t s = 0;
 		bool stat = bitLoad(s, ifs);
@@ -33,7 +43,7 @@ namespace bitRW{
 		x.resize(s);
 
 		for(auto& temp : x){
-			stat = bitLoad(temp, ifs);
+			stat = bitLoad(temp, ifs, dbg);
 			if(!stat) return false;
 		}
 
@@ -41,8 +51,8 @@ namespace bitRW{
 	}
 
 	template <Dictionary T>
-	bool bitLoad(T& x, ifstream& ifs){
-		cout << "DictionaryL\n";
+	bool bitLoad(T& x, ifstream& ifs, bool dbg = false){
+		if(dbg) cout << "DictionaryL\n";
 
 		size_t s = 0;
 		if(!bitLoad(s, ifs)) return false;
@@ -52,8 +62,8 @@ namespace bitRW{
 		typename T::key_type tk;
 		typename T::mapped_type tm;
 		for(size_t i=0; i<s; i++){
-			if(!bitLoad(tk, ifs)) return false;
-			if(!bitLoad(tm, ifs)) return false;
+			if(!bitLoad(tk, ifs, dbg)) return false;
+			if(!bitLoad(tm, ifs, dbg)) return false;
 
 			x.insert(make_pair(tk, tm));
 		}
