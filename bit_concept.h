@@ -1,4 +1,5 @@
-#include <iostream>
+#pragma once
+
 #include <utility>
 #include <array>
 #include <vector>
@@ -10,8 +11,13 @@
 namespace bitRW {
 	using namespace std;
 
+	// int, float,... ###################################################
 	template <class T>
 	concept BASIC = is_integral_v<T> || is_floating_point_v<T>;
+
+	// pointer ##########################################################
+	template <class T>
+	concept Pointer = is_pointer_v<T>;
 
 	// pair #############################################################
 	template <class>
@@ -25,21 +31,6 @@ namespace bitRW {
 
 	template<class T>
 	concept Pair = is_p_v<T>;
-
-	// vector, string ###################################################
-	// template<class>
-	// struct is_vs_c : bool_constant<false>{};
-
-	// template<class T, class Allocator>
-	// struct is_vs_c <vector<T, Allocator>> : bool_constant<true> {};
-	// template <class T, class traits, class Allocator>
-	// struct is_vs_c<basic_string<T, traits, Allocator>> : bool_constant<true> {};
-
-	// template <class T>
-	// inline constexpr bool is_vs_c_v = is_vs_c<T>::value;
-
-	// template <class T>
-	// concept VS_c = is_vs_c_v<T>;
 
 	// vector, string, list #############################################
 	template <class>
@@ -98,14 +89,4 @@ namespace bitRW {
 	template <class T>
 	concept Container = is_seq_container_v<T> || is_dictionary_v<T>;
 	// ##################################################################
-}
-
-template <bitRW::S_Container T>
-void scf(T x) {
-	std::cout << "S_container\n";
-}
-
-template <bitRW::Dictionary T>
-void df(T x) {
-	std::cout << "Dictionary\n";
 }

@@ -7,3 +7,7 @@ test.h
 test_out/
 test_eq.out
 gtest.cpp
+ctest.cpp
+ctest.out
+main.cpp
+test

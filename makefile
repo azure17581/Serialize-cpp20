@@ -10,6 +10,10 @@ test_eq:
 	g++ test_eq.cpp -o test_eq.out -std=c++2a
 	./test_eq.out
 
+ctest:
+	g++ ctest.cpp serialize.cpp -o ctest.out -std=c++2a
+	./ctest.out
+
 gtest:
 	g++ -std=c++2a gtest.cpp -o gtest -L/usr/local/lib -lgtest -lgtest_main
 	./gtest
