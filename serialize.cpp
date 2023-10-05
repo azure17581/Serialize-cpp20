@@ -61,5 +61,8 @@ namespace bitRW{
 		this->bs = s;
 	}
 
-
+	// ####
+	senderW::senderW(bitLoad* l){
+		this->bl = l;
+	}
 }

@@ -1,73 +1,188 @@
 #pragma once
 
-#include <bit>
-#include <fstream>
 #include <iostream>
+#include <fstream>
+#include <bit>
+#include <stdexcept>
 
-//#include "bit_concept.h"
+#include "bit_concept.h"
 
-namespace bitRW{
+namespace bitRW {
 	using namespace std;
 
-	template <BASIC T>
-	bool bitLoad(T& x, ifstream& ifs, bool dbg = false){
-		if(dbg) cout << "basicL\n";
+	class bitLoad{
+	public:
+		bitLoad(string dst, bool d=false);
 
-		ifs.read(bit_cast<char*>(&x), sizeof(x));
+		string getDst();
+		bool isOpen();
+		void close();
+		void open();
+		bool isEOF();
 
-		bool fail = ifs.fail();
-		if(fail) cout << "LOAD FAILED\n";
+		//int, float,...
+		template <BASIC T>
+		void read(T& x);
 
-		return !fail;
-	}
+		//pair<T1, T2>
+		template <Pair T>
+		void read(T& x);
+
+		//vector, list, string
+		template <S_Container T>
+		void read(T& x);
+
+		//map, unordered_map
+		template <Dictionary T>
+		void read(T& x);
+
+		//pointer
+		template <Pointer T>
+		void read(T& x);
+
+		//class
+		template <class T>
+		void read(T& x);
+
+		//multi
+		template <class H, class... T>
+		void read(H& head, T& ...tail);
+
+	private:
+		string dstPath;
+		ifstream ifs;
+		bool dbg;
+		bool eof;
+		void write(){};
+	};
+
+	class senderW{
+	public:
+		senderW(bitLoad* l);
+
+		template<class... Args>
+		void operator()(Args& ...args);
 	
-	template <Pair T>
-	bool bitLoad(T& x, ifstream& ifs, bool dbg = false){
-		if(dbg) cout << "PairL\n";
+	private:
+		bitLoad* bl;
+		void operator()() {}
+	};
 
-		if(!bitLoad(x.first, ifs, dbg)) return false;
-		if(!bitLoad(x.second, ifs, dbg)) return false;
+	//int, float,...
+	template <BASIC T>
+	void bitLoad::read(T& x){
+//		cout << hex;
+//		cout << (size_t)bit_cast<char*>(&x) << endl;
+//		cout << &x << endl;
+//		int kk;
+//		cout << (size_t)bit_cast<char*>(&kk) << endl;
+		if(this->eof) {
+			cout << "EOF\n";
+			throw runtime_error("EOF");
+		}
 
-		return true;
+		this->ifs.read(bit_cast<char*>(&x), sizeof(x));
+
+		if(this->dbg) cout << "basicL : " << x << "\n";
+
+		bool fail = this->ifs.fail();
+		if(fail){
+			cout << "LOAD FAILED\n";
+			this->eof = true;
+			throw runtime_error("EOF");
+		}
+
+		return;
 	}
 
+	//pair<T1, T2>
+	template <Pair T>
+	void bitLoad::read(T& x){
+		if(this->dbg) cout << "PairL\n";
+
+		this->read(x.first);
+		this->read(x.second);
+
+		return ;
+	}
+
+	//vector, string, list
 	template <S_Container T>
-	bool bitLoad(T& x, ifstream& ifs, bool dbg = false){
-		if(dbg) cout << "S_ContainerL\n";
+	void bitLoad::read(T& x){
+		if(this->dbg) cout << "S_ContainerL\n";
 
 		size_t s = 0;
-		bool stat = bitLoad(s, ifs);
-
-		if(!stat) return false;
-
+		this->read(s);
 		x.resize(s);
 
 		for(auto& temp : x){
-			stat = bitLoad(temp, ifs, dbg);
-			if(!stat) return false;
+			this->read(temp);
 		}
 
-		return stat;
+		return;
 	}
 
+	//map, unordered_map
 	template <Dictionary T>
-	bool bitLoad(T& x, ifstream& ifs, bool dbg = false){
-		if(dbg) cout << "DictionaryL\n";
+	void bitLoad::read(T& x){
+		if(this->dbg) cout << "DictionaryL\n";
 
 		size_t s = 0;
-		if(!bitLoad(s, ifs)) return false;
+		this->read(s);
 
 		x.clear();
 
 		typename T::key_type tk;
 		typename T::mapped_type tm;
 		for(size_t i=0; i<s; i++){
-			if(!bitLoad(tk, ifs, dbg)) return false;
-			if(!bitLoad(tm, ifs, dbg)) return false;
+			this->read(tk);
+			this->read(tm);
 
 			x.insert(make_pair(tk, tm));
 		}
 
-		return true;
+		return;
+	}
+
+	//pointer
+	template <Pointer T>
+	void bitLoad::read(T& x){
+		if(this->dbg) cout << "PointerL\n";
+
+		if(x == nullptr){
+			throw runtime_error("nullPtr");
+		}
+
+		this->read(*x);
+
+		return;
+	}
+
+	//class
+	template <class T>
+	void bitLoad::read(T& x){
+		if(this->dbg) cout << "ClassL\n";
+
+		senderW sw(this);
+		x.RW(sw);
+
+		return;
+	}
+
+	//multi
+	template <class H, class... T>
+	void bitLoad::read(H& head, T& ...tail){
+		if(this->dbg) cout << "MultiL\n";
+
+		this->read(head);
+		this->read(tail...);
+
+		return;
+	}
+
+	// senderW ############################################
+	template <class... Args>
+	void senderW::operator()(Args& ...args){
+		this->bl->read(args...);
 	}
 }
