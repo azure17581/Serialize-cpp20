@@ -15,6 +15,10 @@ namespace bitRW {
 	template <class T>
 	concept BASIC = is_integral_v<T> || is_floating_point_v<T>;
 
+	// array ############################################################
+	template <class T>
+	concept ArrayB = is_array_v<T>;
+
 	// pointer ##########################################################
 	template <class T>
 	concept Pointer = is_pointer_v<T>;
@@ -58,6 +62,9 @@ namespace bitRW {
 
 	template <class T>
 	inline constexpr bool is_farr_v = is_farr<T>::value;
+
+	template <class T>
+	concept Array = is_farr_v<T>;
 	// ##################################################################
 
 	// map / unordered_map / multimap / unordered_multimap ##############

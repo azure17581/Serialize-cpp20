@@ -32,6 +32,10 @@ namespace bitRW {
 		template <S_Container T>
 		void read(T& x);
 
+		//STLArray
+		template <Array T>
+		void read(T& x);
+
 		//map, unordered_map
 		template <Dictionary T>
 		void read(T& x);
@@ -47,6 +51,10 @@ namespace bitRW {
 		//multi
 		template <class H, class... T>
 		void read(H& head, T& ...tail);
+
+		//stdArr
+		template <Pointer T>
+		void read(T& x, size_t s);
 
 	private:
 		string dstPath;
@@ -122,6 +130,18 @@ namespace bitRW {
 		return;
 	}
 
+	//STLarray
+	template <Array T>
+	void bitLoad::read(T& x){
+		if(this->dbg) cout << "STLArrayL\n";
+
+		for(auto& temp : x){
+			this->read(temp);
+		}
+
+		return;
+	}
+
 	//map, unordered_map
 	template <Dictionary T>
 	void bitLoad::read(T& x){
@@ -178,6 +198,17 @@ namespace bitRW {
 		this->read(tail...);
 
 		return;
+	}
+
+	//stdArr
+	template <Pointer T>
+	void bitLoad::read(T& x, size_t s){
+//		T ptr = x;
+
+		if(this->dbg) cout << "stdArray\n";
+		for(size_t i=0; i<s; i++){
+			this->read(x[i]);
+		}
 	}
 
 	// senderW ############################################

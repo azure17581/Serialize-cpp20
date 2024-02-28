@@ -56,6 +56,21 @@ namespace bitRW{
 		return this->eof;
 	}
 
+    // #### sender
+    //lode mode
+    sender::sender(bitLoad* l){
+        mode = false;
+        this->bl = l;
+        this->bs = nullptr;
+    }
+
+    //save mode
+    sender::sender(bitSave* s){
+        mode = true;
+        this->bl = nullptr;
+        this->bs = s;
+    }
+
 	// ####
 	senderS::senderS(bitSave* s){
 		this->bs = s;
