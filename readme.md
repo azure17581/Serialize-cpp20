@@ -1,6 +1,9 @@
 # bitRW
 concept(C++20) を使ってシリアライズ/デシリアライズするライブラリ
 
+# 導入
+全ヘッダ，ソースファイルをコピー．`serialize.h` をインクルードする．
+
 # シリアライズ
 ```c++
 bitRW::bitSave writer("out");
