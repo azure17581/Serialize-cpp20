@@ -78,6 +78,7 @@ namespace bitRW {
     template <class Key, class T, class Hash, class Pred, class Allocator>
     struct is_dictionary<unordered_map<Key, T, Hash, Pred, Allocator>> : bool_constant<true> {};
     //multimap
+    //おそらく問題ないが未検証
     // template <class Key, class T, class Compare, class Allocator>
     // struct is_dictionary<multimap<Key, T, Compare, Allocator>> : bool_constant<true> {};
     //unordered_multimap
