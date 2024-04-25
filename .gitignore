@@ -11,3 +11,4 @@ ctest.cpp
 ctest.out
 main.cpp
 test/
+.vscode/
