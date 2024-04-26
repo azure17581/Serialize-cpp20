@@ -71,7 +71,7 @@ void myClass::BITRW_BITLOAD(bitRW::senderL sd){
     sd(this->val1, this->val2, this->val3, this->name);
 }
 ```
-`public`メソッドに ` void BITRW_BITSAVE(bitRW::senderS sd) const`, `void BITRW_BITLOAD(bitRW::senderL sd)` を追加。  
+`public`メソッドに `void BITRW_BITSAVE(bitRW::senderS sd) const`, `void BITRW_BITLOAD(bitRW::senderL sd)` を追加。  
 各メソッドでは保存/読込したいメンバ変数をまとめて`sd()`へ渡す。順番を一致させる。  
 対応させたクラスの変数をシリアライズ/デシリアライズするには，他の型と同様にして`.write()`や`.read()`の引数へ渡す。
 
@@ -92,5 +92,5 @@ void myClass::BITRW_BITLOAD(bitRW::senderL sd){
 ユーザー定義 class|o|o
 (可変長引数)|o|o
 
-`int`, `double`, ... は，正確には`is_integral<T>::value || is_floating_point<T>::value`が`true`となる型`T`を指す。  
+`int`, `double`, ... は，正確には`std::is_integral<T>::value || std::is_floating_point<T>::value`が`true`となる型`T`を指す。  
 `std::multimap`, `std::unordered_multimap` もおそらく問題なく動くが未検証なので対応させていない。
